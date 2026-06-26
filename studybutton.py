@@ -1,6 +1,3 @@
-
-
-
 from study_mode import StudyMode
 
 btn  = gpiozero.DigitalInputDevice(pin=16, pull_up=False)

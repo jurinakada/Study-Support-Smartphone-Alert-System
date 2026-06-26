@@ -10,11 +10,15 @@ try:
         # turn  on the green LED
         led_green.on()
         
-        #detection system detected  smartphone usages
+        #detection system detected  smartphone usage
+        if is_detected == True:
+            led_red.on()
 
         #when the warning level becomes 1
         if study.warning_level == 1:
-            led_red.on()
+            while True:
+                led_red.on ()
+                time.sleep(1)
         
 
 
