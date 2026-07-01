@@ -6,12 +6,17 @@ study = StudyMode()
 try:
     while True:
         if btn.value == 1:
-            print("the Study mode is started")
+            print("Study mode is Started")
             if study.is_running == False:
                 study.start()
             else:
                 study.stop()
             time.sleep(1)
+            if study.is_running == True:
+                if btn.value == 1:
+                    study.start()
+                    print("Study Mode is Stopped")
+                    time.sleep(1)
     time.sleep(1)
 except KeyboardInterrupt:
     btn.close()

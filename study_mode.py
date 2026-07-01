@@ -24,6 +24,7 @@ class StudyMode:
         start_time = 0
 
     def stop_study():
+        
 
     def calculate():
 
