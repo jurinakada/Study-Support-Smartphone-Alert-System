@@ -1,35 +1,88 @@
-from gpiozero
+import time
+import LCD1602
+
+from calendar_api import get_study_subjects
+
 
 class LCD_messages:
-    #The messages for starting
-    def start_stu():
 
+    # The messages for starting
+    @staticmethod
+    def start_stu():
         LCD1602.init(0x3f, 1)
 
-        LCD1602.write(0,0 'Study Mode is started')
+        LCD1602.write(0, 0, "Study Mode")
+        LCD1602.write(1, 0, "is started")
 
-        LCD1602.write(1,0 'Checking your schedules from your google calender')
+        time.sleep(2)
 
-        
-    #The messages for finishing
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Checking")
+        LCD1602.write(1, 0, "Google Calendar")
+
+    # The messages for finishing
+    @staticmethod
     def finish_stu():
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Study Mode")
+        LCD1602.write(1, 0, "is stopped")
 
-        LCD1602.write(0,0 'Study Mode is stopped')
-        lCD1602.write(1,0 'Summrizing the Final Report')
-    
-    #The messages for displaying calender information via Google Calender API
+        time.sleep(2)
+
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Summarizing")
+        LCD1602.write(1, 0, "Final Report")
+
+    # The messages for displaying calendar information via Google Calendar API
+    @staticmethod
     def calender_info():
-    
-        LCD1602.write(0,0 'The calender information will be dispalyed')
-    
-    def warning_mes1 ()
-        LCD1602.write(0,0 'Warning 1: Smartphone use detected')
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Calendar info")
+        LCD1602.write(1, 0, "will display")
 
-        LCD1602.write(0,0 'Please put it down, or the warning buzzer will sound.')
+        time.sleep(2)
 
-    def warning_mes2 ()
+        subjects = get_study_subjects()
+        messages = []
 
-       LCD1602.write(0,0 'Warning 2: Smartphone use detected')
+        # If there are no subjects on Google Calendar
+        if not subjects:
+            messages.append("No study event")
+            messages.append("today")
+        else:
+            messages.append("Today's study:")
 
-       LCD1602.write(0,0 'The buzzer is turned on. Please put your phone down.')
+            for subject in subjects:
+                messages.append(subject)
 
+        # Display messages on LCD
+        for message in messages:
+            LCD1602.clear()
+            LCD1602.write(0, 0, message[:16])
+            time.sleep(2)
+
+        return subjects
+
+    @staticmethod
+    def warning_mes1():
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Warning 1:")
+        LCD1602.write(1, 0, "Phone detected")
+
+        time.sleep(2)
+
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Put it down")
+        LCD1602.write(1, 0, "or buzzer ON")
+
+    @staticmethod
+    def warning_mes2():
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Warning 2:")
+        LCD1602.write(1, 0, "Buzzer ON")
+
+        time.sleep(2)
+
+        LCD1602.clear()
+        LCD1602.write(0, 0, "Put your phone")
+        LCD1602.write(1, 0, "down")
