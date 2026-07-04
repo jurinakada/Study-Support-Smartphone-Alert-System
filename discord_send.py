@@ -37,11 +37,12 @@ class DiscordSend:
         else:
             print("Failed:", response.status_code)
 
-if __name__ == "__main__":
-    discord = DiscordSend()
-    discord.warning_notification(" smartphone usage has been detected")
-    discord.warning_notification(" Please put your smartphone down")
-    discord.end_final_report("final repot ....")
+#testing
+# if __name__ == "__main__":
+#     discord = DiscordSend()
+#     discord.warning_notification(" smartphone usage has been detected")
+#     discord.warning_notification(" Please put your smartphone down")
+#     discord.end_final_report("final repot ....")
     
         
 
