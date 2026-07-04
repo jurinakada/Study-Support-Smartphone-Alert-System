@@ -150,7 +150,7 @@ The final report is sent to:
 
 ## Development Schedule
 
-### June 17
+### Zero Phase
 
 * Develop the system architecture
 * Decide the role of each Python file
@@ -159,7 +159,7 @@ The final report is sent to:
 * Decide warning conditions
 * Decide final report contents
 
-### June 24
+### First Phase
 
 * Implement the basic Python operation flow
 * Implement push button control
@@ -172,7 +172,7 @@ The final report is sent to:
 * Test each hardware component separately
 * Start collecting images for the detection model
 
-### July 1
+### Second Phase
 
 * Prepare and label the image dataset
 * Train the object detection model
@@ -183,7 +183,7 @@ The final report is sent to:
 * Connect detection results with warning control
 * Test Warning Level 1 and Warning Level 2
 
-### July 8
+### Third Phase
 
 * Test the whole system
 * Adjust threshold values
