@@ -52,3 +52,6 @@ Thumbs.db
 
 # VSCode
 .vscode/
+
+#humid and tempreture sensor
+DHT11.py
