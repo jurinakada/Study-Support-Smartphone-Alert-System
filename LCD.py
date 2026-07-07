@@ -1,7 +1,12 @@
 import time
 import LCD1602
+#for testing
+# try:
+#     import LCD1602
+# except ModuleNotFoundError:
+#     import LCD1602_mock as LCD1602
 
-from calendar_api import get_study_subjects
+from check_calender import get_study_subjects
 
 
 class LCD_messages:

@@ -55,3 +55,8 @@ Thumbs.db
 
 #humid and tempreture sensor
 DHT11.py
+#LCD control code
+LCD1602.py
+
+#LCD1602 testing code
+LCD1602_mock.py
