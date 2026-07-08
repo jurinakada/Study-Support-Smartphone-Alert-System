@@ -53,11 +53,13 @@ class StudyMode:
         return self.study_time
 
     def start_away(self):
-        if self.is_running == True and self.start_away_time is None:
+        if self.is_running == True and self.is_sitting == True:
+            self.is_sitting == False
             self.start_away_time = time.time()
 
     def stop_away(self):
-        if self.is_running == True and self.start_away_time is not None:
+        if self.is_running == True and self.is_sitting == False:
+            self.is_sitting == True
             self.stop_away_time = time.time()
 
             self.away_time += self.stop_away_time - self.start_away_time
