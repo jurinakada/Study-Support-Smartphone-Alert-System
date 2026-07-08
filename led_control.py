@@ -35,7 +35,7 @@ try:
         
 
 
-except KeyboardInterrupt:
+c
     led_green.close()
     led_red.close()
 
