@@ -3,7 +3,7 @@ from google.oauth2.service_account import Credentials
 from datetime import datetime
 
 class GoogleSheetsReport:
-    def__init__(self, json_keyfile="credentials.json", spreadsheet_name="FinalReport"):
+    def__init__(self, report_content,json_keyfile="credentials.json", spreadsheet_name="FinalReport"):
        #scope settings
         scope = [
         https://www.googleapis.com/auth/spreadsheets,
@@ -14,7 +14,7 @@ class GoogleSheetsReport:
         scopes=scope
 
     )
-    report_list = []
+    send_content = report_content
     #initalize client
     client = gspread.authorize(credentials)\
     
