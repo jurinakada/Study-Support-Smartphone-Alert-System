@@ -6,6 +6,7 @@ class StudyMode:
         # flags
         self.is_running = False
         self.is_sitting = False
+        self.is_using_phone = False
 
         # time (recording)
         self.start_time = None  # the variable for recording time when the user starts studying
@@ -17,24 +18,53 @@ class StudyMode:
         self.away_time = 0  # total awaytime
         self.actual_study_time = 0  # actual total study time (= study_time - away_time)
 
+        # smartphone usage time
+        self.start_phone_time = None
+        self.stop_phone_time = None
+        self.phone_usage_time = 0
+        self.current_phone_usage_time = 0
+
         # variables for detection
         self.is_detected = False
 
         # warning variables
-        self.warning_level = 0  # range 0-1
+        self.warning_level = 0  # range 0-2
         self.warning_count = 0  # total number of warning the user gets
 
     def start_study(self):
-        self.is_running = True
-        self.start_time = time.time()
-        self.stop_time = None
+        if self.is_running == False:
+            self.is_running = True
+            self.start_time = time.time()
+            self.stop_time = None
 
-        self.study_time = 0
-        self.away_time = 0
-        self.actual_study_time = 0
+            self.study_time = 0
+            self.away_time = 0
+            self.actual_study_time = 0
+
+            self.start_away_time = None
+            self.stop_away_time = None
+
+            self.start_phone_time = None
+            self.stop_phone_time = None
+            self.phone_usage_time = 0
+            self.current_phone_usage_time = 0
+
+            self.warning_level = 0
+            self.warning_count = 0
+
+            
 
     def stop_study(self):
         if self.is_running == True:
+
+            #if the user is away when study mode is stopped
+            if self.start_away_time is not None:
+                self.stop_away()
+            
+            #if the smartphone is being used when study mode is stopped
+            if self.start_phone_time is not None:
+                self.stop_phone_usage()
+
             self.stop_time = time.time()
 
             self.study_time = self.stop_time - self.start_time
@@ -47,19 +77,19 @@ class StudyMode:
         return self.current_time
 
     def get_total_study_time(self):
-        if self.is_running == True:
+        if self.is_running == True and self.start_time is not None:
             self.study_time = time.time() - self.start_time
 
         return self.study_time
 
     def start_away(self):
-        if self.is_running == True and self.is_sitting == True:
-            self.is_sitting == False
+        if self.is_running == True and self.start_away_time is None:
+            self.is_sitting = False
             self.start_away_time = time.time()
 
     def stop_away(self):
-        if self.is_running == True and self.is_sitting == False:
-            self.is_sitting == True
+        if self.is_running == True and self.start_away_time is not None:
+            self.is_sitting = True
             self.stop_away_time = time.time()
 
             self.away_time += self.stop_away_time - self.start_away_time
@@ -80,7 +110,50 @@ class StudyMode:
         total_away_time = self.get_total_away_time()
 
         self.actual_study_time = total_study_time - total_away_time
+
+        if self.actual_study_time < 0:
+            self.actual_study_time = 0
+
         return self.actual_study_time
+    
+    def start_phone_usage(self):
+        if self.is_running == True and self.start_phone_time is None:
+            self.is_using_phone = True
+            self.start_phone_time = time.time()
+            self.stop_phone_time = None
+
+    def stop_phone_usage(self):
+        if self.start_phone_time is not None:
+            self.stop_phone_time = time.time()
+
+            self.phone_usage_time += (
+                self.stop_phone_time - self.start_phone_time
+            )
+
+            self.is_using_phone = False
+            self.start_phone_time = None
+            self.stop_phone_time = None
+            self.current_phone_usage_time = 0
+
+    def get_current_phone_usage_time(self):
+        if self.start_phone_time is not None:
+            self.current_phone_usage_time = (
+                time.time() - self.start_phone_time
+            )
+        else:
+            self.current_phone_usage_time = 0
+
+        return self.current_phone_usage_time
+
+    def get_total_phone_usage_time(self):
+        total_phone_usage_time = self.phone_usage_time
+
+        if self.start_phone_time is not None:
+            total_phone_usage_time += (
+                time.time() - self.start_phone_time
+            )
+
+        return total_phone_usage_time
 
 
 # testing parts
