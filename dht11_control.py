@@ -13,6 +13,7 @@ class DHT11Control:
     def read(self):
         humidity, temperature = self.sensor.read_data()
 
+        # If the sensor fails to read data
         if humidity == 0.0 and temperature == 0.0:
             print("Failed to read DHT11 data")
             return None, None
@@ -28,6 +29,7 @@ class DHT11Control:
 
         except KeyboardInterrupt:
             print("DHT11 measurement stopped")
+
 
 # testing parts
 if __name__ == "__main__":

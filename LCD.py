@@ -1,5 +1,6 @@
 import time
 import LCD1602
+
 #for testing
 # try:
 #     import LCD1602
@@ -17,33 +18,33 @@ class LCD_messages:
         LCD1602.init(0x3f, 1)
 
         LCD1602.write(0, 0, "Study Mode")
-        LCD1602.write(1, 0, "is started")
+        LCD1602.write(0, 1, "is started")
 
         time.sleep(2)
 
         LCD1602.clear()
         LCD1602.write(0, 0, "Checking")
-        LCD1602.write(1, 0, "Google Calendar")
+        LCD1602.write(0, 1, "Google Calendar")
 
     # The messages for finishing
     @staticmethod
     def finish_stu():
         LCD1602.clear()
         LCD1602.write(0, 0, "Study Mode")
-        LCD1602.write(1, 0, "is stopped")
+        LCD1602.write(0, 1, "is stopped")
 
         time.sleep(2)
 
         LCD1602.clear()
         LCD1602.write(0, 0, "Summarizing")
-        LCD1602.write(1, 0, "Final Report")
+        LCD1602.write(0, 1, "Final Report")
 
     # The messages for displaying calendar information via Google Calendar API
     @staticmethod
-    def calender_info():
+    def calendar_info():
         LCD1602.clear()
         LCD1602.write(0, 0, "Calendar info")
-        LCD1602.write(1, 0, "will display")
+        LCD1602.write(0, 1, "will display")
 
         time.sleep(2)
 
@@ -72,22 +73,22 @@ class LCD_messages:
     def warning_mes1():
         LCD1602.clear()
         LCD1602.write(0, 0, "Warning 1:")
-        LCD1602.write(1, 0, "Phone detected")
+        LCD1602.write(0, 1, "Phone detected")
 
         time.sleep(2)
 
         LCD1602.clear()
         LCD1602.write(0, 0, "Put it down")
-        LCD1602.write(1, 0, "or buzzer ON")
+        LCD1602.write(0, 1, "or buzzer ON")
 
     @staticmethod
     def warning_mes2():
         LCD1602.clear()
         LCD1602.write(0, 0, "Warning 2:")
-        LCD1602.write(1, 0, "Buzzer ON")
+        LCD1602.write(0, 1, "Buzzer ON")
 
         time.sleep(2)
 
         LCD1602.clear()
         LCD1602.write(0, 0, "Put your phone")
-        LCD1602.write(1, 0, "down")
+        LCD1602.write(0, 1, "down")

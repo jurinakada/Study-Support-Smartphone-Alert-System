@@ -80,8 +80,12 @@ def get_study_subjects():
         for event in events:
             title = event.get("summary", "")
 
-            if title:
-                subjects.append(title)
+            # Get only events whose title starts with "Study:"
+            if title.lower().startswith("study:"):
+                subject = title.split(":", 1)[1].strip()
+
+                if subject:
+                    subjects.append(subject)
 
         return subjects
 
@@ -99,10 +103,3 @@ def get_study_subjects():
 
 #     for subject in subjects:
 #         print(subject)
-
-
-
-    
-
-
-
