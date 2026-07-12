@@ -52,8 +52,8 @@ class DiscordSend:
 
 
 #testing
-# if __name__ == "__main__":
-#     discord = DiscordSend()
-#     discord.warning_notification("Smartphone usage has been detected")
-#     discord.warning_notification("Please put your smartphone down")
-#     discord.send_final_report("Final report ....")
+if __name__ == "__main__":
+    discord = DiscordSend()
+    discord.warning_notification("Smartphone usage has been detected")
+    discord.warning_notification("Please put your smartphone down")
+    discord.send_final_report("Final report ....")

@@ -58,13 +58,11 @@ model = YOLO("best.pt")
 
 
 def get_center(box):
-    """
-    This function calculates the center point of a detected box.
+    #This function calculates the center point of a detected box.
 
-    box = [x1, y1, x2, y2]
-    x1, y1 = left top position
-    x2, y2 = right bottom position
-    """
+    #box = [x1, y1, x2, y2]
+    #x1, y1 = left top position
+    #x2, y2 = right bottom position
     x1, y1, x2, y2 = box
 
     center_x = (x1 + x2) / 2
@@ -74,10 +72,9 @@ def get_center(box):
 
 
 def get_distance(point1, point2):
-    """
-    This function calculates the distance between two points.
-    It is used to check whether hand and phone are close.
-    """
+    
+    #This function calculates the distance between two points.
+    #It is used to check whether hand and phone are close.
     x1, y1 = point1
     x2, y2 = point2
 
@@ -87,15 +84,14 @@ def get_distance(point1, point2):
 
 
 def detection(frame):
-    """
-    This function detects:
-    1. whether the user is sitting
-    2. whether the user is using / holding a smartphone
+    
+    #This function detects:
+    # 1. whether the user is sitting
+    # 2. whether the user is using / holding a smartphone
 
-    return:
-        is_sitting
-        is_using_phone
-    """
+    # return:
+    #     is_sitting
+    #     is_using_phone
 
     # Run YOLO detection on the camera frame
     results = model(frame, verbose=False)
@@ -139,18 +135,14 @@ def detection(frame):
             elif class_name in ["face"]:
                 faces.append([x1, y1, x2, y2])
 
-    # ------------------------------
     # Sitting detection
-    # ------------------------------
     # If person or face is detected, the user is sitting
     if len(persons) > 0 or len(faces) > 0:
         is_sitting = True
     else:
         is_sitting = False
 
-    # ------------------------------
     # Smartphone usage detection
-    # ------------------------------
     is_using_phone = False
 
     for phone in phones:
