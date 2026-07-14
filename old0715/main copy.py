@@ -12,27 +12,15 @@ from warning import check_warning
 from buzzer_control import BuzzerControl
 from discord_send import DiscordSend
 from dht11_control import DHT11Control
-from light_sensor_control import LightSensor
+from light_sensor import LightSensor
 from final_report import create_final_report
 from send_sheet import GoogleSheetsReport
 
-from threading import Event
 
-
-btn = gpiozero.DigitalInputDevice(
-    pin=16,
-    pull_up=False
-)
-
-button_pressed = Event()
-
-#save the button press even while YOLO is running
-btn.when_activated = button_pressed.set
-
+btn = gpiozero.DigitalInputDevice(pin=16, pull_up=False)
 
 study = StudyMode()
 camera = None
-
 
 #initialize each module
 led_control = LEDControl(
@@ -40,30 +28,22 @@ led_control = LEDControl(
     red_pin=25
 )
 
-buzzer_control = BuzzerControl(
-    pin=22
-)
+buzzer_control = BuzzerControl(pin=22)
 
 discord = DiscordSend()
 
 dht = DHT11Control(
-
+    pin=14,
+    interval=5
 )
 
-#    pin=14,
- #   interval=5
- 
- 
-light = LightSensor(
-    channel=0
-)
+light = LightSensor(channel=0)
 
 
 #environment data for final report
 humidity = None
 temperature = None
 brightness = None
-
 
 #time when sensors were last read
 last_dht_time = 0
@@ -72,10 +52,10 @@ last_light_time = 0
 
 try:
     while True:
-
-        #check whether the button was pressed
-        if button_pressed.is_set():
-            button_pressed.clear()
+        if btn.value == 1:
+            #wait until the user releases the button
+            while btn.value == 1:
+                time.sleep(0.05)
 
             if study.is_running == False:
                 study.start_study()
@@ -84,7 +64,7 @@ try:
                 #turn on the green LED
                 led_control.check_led(study)
 
-                #LCD displays the message
+                #LCD display the message
                 #Google Calendar information is also displayed
                 LCD_messages.start_stu()
 
@@ -99,14 +79,6 @@ try:
             else:
                 study.stop_study()
                 print("Study Mode is Stopped")
-                
-             #   try:
-                #    humidity, temperature = dht.read()
-
-                #except Exception as error:
-                   # print("DHT11 Error:",error)
-                    #humidity = None
-                    #temperature = None
 
                 #turn off buzzer and LED
                 buzzer_control.check_buzzer(study)
@@ -135,53 +107,35 @@ try:
 
                 #send final report to Google Spreadsheet
                 try:
-                    sheet_report = GoogleSheetsReport(
-                        final_report
-                    )
-
+                    sheet_report = GoogleSheetsReport(final_report)
                     sheet_report.send_report()
 
                 except Exception as error:
-                    print(
-                        "Google Sheets Error:",
-                        error
-                    )
+                    print("Google Sheets Error:", error)
 
                 break  #stop system
-
 
         if study.is_running == True:
 
             if camera is not None:
                 print("Capturing frame...")
-
                 frame = camera.capture_frame()
 
                 if frame is not None:
                     print("Frame captured")
                     print("Running YOLO")
 
-                    is_sitting, is_using_phone = detection(
-                        frame
-                    )
+                    is_sitting, is_using_phone = detection(frame)
 
                     print("YOLO finished")
                     print("Sitting:", is_sitting)
-                    print(
-                        "Using phone:",
-                        is_using_phone
-                    )
+                    print("Using phone:", is_using_phone)
 
-
-                    #sitting status
                     if is_sitting == True:
 
                         if study.start_away_time is not None:
                             study.stop_away()
-
-                            print(
-                                "Away time measurement stopped"
-                            )
+                            print("Away time measurement stopped")
 
                         study.is_sitting = True
 
@@ -189,59 +143,26 @@ try:
                         #start away time only once
                         if study.start_away_time is None:
                             study.start_away()
-
-                            print(
-                                "Away time measurement started"
-                            )
-
+                            print("Away time measurement started")
 
                     #smartphone usage status
                     if is_using_phone == True:
-
                         #Start phone usage time only once
                         if study.start_phone_time is None:
                             study.start_phone_usage()
-
-                            print(
-                                "Phone usage measurement started"
-                            )
+                            print("Phone usage measurement started")
 
                     else:
                         #stop using phone while measuring it
                         if study.start_phone_time is not None:
                             study.stop_phone_usage()
-
-                            print(
-                                "Phone usage measurement stopped"
-                            )
-
+                            print("Phone usage measurement stopped")
 
             #save warning level before checking
             previous_warning_level = study.warning_level
 
-
             #check smartphone usage warning
-            #for final version
             warning_level = check_warning(study)
-
-            #for testing
-            # warning_level = check_warning(
-            #     study,
-            #     threshold1=2,
-            #     threshold2=4
-            # )
-
-
-            print(
-                "Phone usage time:",
-                study.get_current_phone_usage_time()
-            )
-
-            print(
-                "Warning level:",
-                study.warning_level
-            )
-
 
             #send Discord message only when warning level changes
             if warning_level != previous_warning_level:
@@ -256,18 +177,14 @@ try:
                         "Please put your smartphone down"
                     )
 
-
             #control green and red LEDs
             led_control.check_led(study)
-
 
             #turn on buzzer when warning level is 2
             buzzer_control.check_buzzer(study)
 
-
             #measure temperature and humidity every 5 seconds
             if time.time() - last_dht_time >= dht.interval:
-
                 try:
                     new_humidity, new_temperature = dht.read()
 
@@ -277,40 +194,25 @@ try:
                         temperature = new_temperature
 
                 except Exception as error:
-                    print(
-                        "DHT11 Error:",
-                        error
-                    )
+                    print("DHT11 Error:", error)
 
                 last_dht_time = time.time()
-                
-
 
             #measure brightness every 5 seconds
             if time.time() - last_light_time >= 5:
-
                 try:
                     brightness = light.read()
-
-                    print(
-                        "Brightness:",
-                        brightness
-                    )
+                    print("Brightness:", brightness)
 
                 except Exception as error:
-                    print(
-                        "Light Sensor Error:",
-                        error
-                    )
+                    print("Light Sensor Error:", error)
 
                 last_light_time = time.time()
-
 
         else:
             #turn off LED and buzzer while study mode is stopped
             led_control.check_led(study)
             buzzer_control.check_buzzer(study)
-
 
         time.sleep(0.1)
 
@@ -333,5 +235,4 @@ finally:
     light.close()
 
     btn.close()
-
     print("Button was closed")

@@ -3,7 +3,7 @@ from LCD import LCD_messages
 
 import time
 
-def check_warning(study, threshold1 = 5, threshold2 = 10):
+def check_warning(study, threshold1 = 60, threshold2 = 120):
     #get the current countinuous user's smartphone usage time
 
     phone_usage_time = study.get_current_phone_usage_time()

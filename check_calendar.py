@@ -79,8 +79,9 @@ def get_study_subjects():
 
         for event in events:
             title = event.get("summary", "")
+            print(f"Calendar title: {repr(title)}")
 
-            # Get only events whose title starts with "Study:"
+            # "Study:" または "study:" で始まる予定を取得
             if title.lower().startswith("study:"):
                 subject = title.split(":", 1)[1].strip()
 
@@ -97,9 +98,13 @@ def get_study_subjects():
         print(f"Error: {error}")
         return []
 
+if __name__ == "__main__":
+    subjects = get_study_subjects()
 
-# if __name__ == "__main__":
-#     subjects = get_study_subjects()
+    if subjects:
+        print("Today's study subjects:")
 
-#     for subject in subjects:
-#         print(subject)
+        for subject in subjects:
+            print(f"- {subject}")
+    else:
+        print("No study subjects were found today.")

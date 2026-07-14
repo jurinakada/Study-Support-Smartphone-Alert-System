@@ -16,8 +16,7 @@ class LCD_messages:
     @staticmethod
     def start_stu():
         LCD1602.init(0x3f, 1)
-        
-        LCD1602.clear()
+
         LCD1602.write(0, 0, "Study Mode")
         LCD1602.write(0, 1, "is started")
 
@@ -28,7 +27,7 @@ class LCD_messages:
         LCD1602.write(0, 1, "Google Calendar")
 
         #display the subjects via google calender API
-        LCD_messages.calendar_info()
+        LCD_messages.calenear_info()
 
     # The messages for finishing
     @staticmethod
@@ -42,12 +41,6 @@ class LCD_messages:
         LCD1602.clear()
         LCD1602.write(0, 0, "Summarizing")
         LCD1602.write(0, 1, "Final Report")
-        
-        time.sleep(2)
-        
-        LCD1602.clear()
-        LCD1602.write(0, 0, "Well Done!")
-        LCD1602.write(0, 1, "Keep Going!!")
 
     # The messages for displaying calendar information via Google Calendar API
     @staticmethod

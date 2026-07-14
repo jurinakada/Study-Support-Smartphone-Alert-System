@@ -38,51 +38,23 @@ class DiscordSend:
         except requests.exceptions.RequestException as error:
             print("Discord connection error:", error)
             
-    # #sending final report
+    #sending final report
     def send_final_report(self, final_report):
-         if not self.webhook_url:
-             print("Final report was not sent")
-             return
+        if not self.webhook_url:
+            print("Final report was not sent")
+            return
 
-         head_list = [
-             #"Date and Time",
-             "Study Time",
-             "Away Time",
-             "Actual Study Time",
-             "Phone Usage Time",
-             "Warning Count",
-             "Light Value",
-             "Brightness",
-             "Temperature",
-             "Humidity"
-         ]
-
-         report_message = ""
-            
-         for i in range(len(final_report)):
-
-             if final_report[i] is None:
-                 report_message += str(head_list[i]) + ": No data\n"
-
-             else:
-                 report_message += (
-                     str(head_list[i])
-                     + ": "
-                     + str(final_report[i])
-                     + "\n"
-                 )
-
-         data = {
-             "content": report_message
-         }
-         try:
+        data = {
+            "content": str(final_report)
+        }
+        try:
             response = requests.post(self.webhook_url, json=data, timeout=10)
 
             if response.status_code == 204:
                 print("Sent successfully!")
             else:
                 print("Failed:", response.status_code)
-         except requests.exceptions.RequestException as error:
+        except requests.exceptions.RequestException as error:
             print("Discord connection error:", error)
 
 #testing

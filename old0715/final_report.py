@@ -28,7 +28,7 @@ def evaluate_light(brightness):
         return "Dark"
 
 
-def create_final_report(
+def create_report_list(
     study,
     brightness=None,
     temperature=None,

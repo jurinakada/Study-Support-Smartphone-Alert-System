@@ -47,13 +47,10 @@ buzzer_control = BuzzerControl(
 discord = DiscordSend()
 
 dht = DHT11Control(
-
+    pin=14,
+    interval=5
 )
 
-#    pin=14,
- #   interval=5
- 
- 
 light = LightSensor(
     channel=0
 )
@@ -99,14 +96,6 @@ try:
             else:
                 study.stop_study()
                 print("Study Mode is Stopped")
-                
-             #   try:
-                #    humidity, temperature = dht.read()
-
-                #except Exception as error:
-                   # print("DHT11 Error:",error)
-                    #humidity = None
-                    #temperature = None
 
                 #turn off buzzer and LED
                 buzzer_control.check_buzzer(study)
@@ -121,7 +110,16 @@ try:
                 print("finalizing report")
                 LCD_messages.finish_stu()
 
+                #make the text report for Discord
                 final_report = create_final_report(
+                    study,
+                    brightness=brightness,
+                    temperature=temperature,
+                    humidity=humidity
+                )
+
+                #make the list report for Google Spreadsheet
+                report_list = create_report_list(
                     study,
                     brightness=brightness,
                     temperature=temperature,
@@ -135,17 +133,11 @@ try:
 
                 #send final report to Google Spreadsheet
                 try:
-                    sheet_report = GoogleSheetsReport(
-                        final_report
-                    )
-
+                    sheet_report = GoogleSheetsReport(report_list)
                     sheet_report.send_report()
 
                 except Exception as error:
-                    print(
-                        "Google Sheets Error:",
-                        error
-                    )
+                    print("Google Sheets Error:", error)
 
                 break  #stop system
 
@@ -283,7 +275,6 @@ try:
                     )
 
                 last_dht_time = time.time()
-                
 
 
             #measure brightness every 5 seconds
@@ -328,6 +319,8 @@ finally:
         camera.close()
 
     #close GPIO modules
+    dht.close()
+
     buzzer_control.close()
     led_control.close()
     light.close()

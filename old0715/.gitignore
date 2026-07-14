@@ -61,8 +61,3 @@ LCD1602.py
 
 #LCD1602 testing code
 LCD1602_mock.py
-
-
-#skip the old python file
-old/
-old0715/
